@@ -42,7 +42,7 @@ class AuthenticateUserCase {
 
         }
 
-        const token = sign({}, "australopiteco", {
+        const token = sign({}, "santanaJeff", {
             subject: user.id,
             expiresIn: "1d"
         })
