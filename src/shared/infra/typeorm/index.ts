@@ -8,7 +8,14 @@ export default async (host = "localhost"): Promise<Connection> => {
     }
     return createConnection(
         Object.assign(defaultOptions, {
-            host
+            host:
+                process.env.NODE_ENV === "test"
+                    ? "localhost"
+                    : host,
+            database:
+                process.env.NODE_ENV === "test"
+                    ? "rentex_test"
+                    : defaultOptions.database
         })
     )
 }
