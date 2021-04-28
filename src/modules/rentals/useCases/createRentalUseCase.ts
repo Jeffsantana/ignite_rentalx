@@ -4,6 +4,7 @@ import { Rental } from "../infra/typeorm/entities/Rental";
 import { IRentalsRepository } from "../repositories/IRentalsRepository";
 import { IDateProvider } from "@shared/container/providers/DateProvider/IDateProvider";
 import { inject, injectable } from "tsyringe";
+import { ICarsRepository } from "@modules/cars/repositories/ICarsRepository";
 
 
 
@@ -19,7 +20,9 @@ class CreateRentalUseCase {
         @inject("RentalsRepository")
         private rentalsRepository: IRentalsRepository,
         @inject("DateProvider")
-        private dateProvider: IDateProvider
+        private dateProvider: IDateProvider,
+        @inject("CarsRepository")
+        private CarsRepository: ICarsRepository
     ) { }
     async execute({
         user_id,
@@ -43,6 +46,8 @@ class CreateRentalUseCase {
         if (rentalOpenToUser) {
             throw new AppError("There's a rental in progress for this user");
         }
+
+        await this.CarsRepository.updateAvailable(car_id, false);
 
         const rental = await this.rentalsRepository.create({
             user_id,
