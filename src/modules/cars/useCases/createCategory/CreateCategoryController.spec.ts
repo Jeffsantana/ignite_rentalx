@@ -64,7 +64,6 @@ describe("Create Category Controller", () => {
             })
 
         expect(result.status).toBe(201);
-        console.log("🚀 ~ result create new categories", result.status);
     })
     it("should be able not to create a new category with name already exists", async () => {
         const result = await request(app)
@@ -78,7 +77,6 @@ describe("Create Category Controller", () => {
             })
 
         expect(result.status).toBe(400);
-        console.log("🚀 ~ result categories not create", result.status);
     })
 
 })
