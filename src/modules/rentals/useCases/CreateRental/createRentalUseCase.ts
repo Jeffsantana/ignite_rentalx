@@ -30,6 +30,8 @@ class CreateRentalUseCase {
         expected_return_date
     }: IRequest): Promise<Rental> {
 
+        // console.log("🚀 ~ CreateRentalUseCase ~ car_id", car_id);
+
         const compare = this.dateProvider.compareInHours(this.dateProvider.dateNow(), expected_return_date)
         if (compare < 24) {
             throw new AppError("Invalid return time");
@@ -38,7 +40,6 @@ class CreateRentalUseCase {
         const carUnAvailable = await this.rentalsRepository.findOpenRentalByCar(car_id);
 
         if (carUnAvailable) {
-            console.log("🚀 ~ CreateRentalUseCase ~ carUnAvailable", carUnAvailable);
             throw new AppError("Car is not available");
         }
 

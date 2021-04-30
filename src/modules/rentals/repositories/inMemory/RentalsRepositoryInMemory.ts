@@ -5,9 +5,6 @@ import { IRentalsRepository } from "../IRentalsRepository";
 
 class RentalsRepositoryInMemory implements IRentalsRepository {
 
-    findById(id: string): Promise<Rental> {
-        throw new Error("Method not implemented.");
-    }
     rentals: Rental[] = [];
     async create({ car_id, user_id, expected_return_date }: ICreateRentalDTO): Promise<Rental> {
         const rental = new Rental();
@@ -16,8 +13,7 @@ class RentalsRepositoryInMemory implements IRentalsRepository {
             car_id,
             user_id,
             expected_return_date,
-            start_date: new Date(),
-            end_date: new Date()
+            start_date: new Date()
         })
 
         this.rentals.push(rental);
@@ -26,13 +22,24 @@ class RentalsRepositoryInMemory implements IRentalsRepository {
 
     }
     async findOpenRentalByCar(car_id: string): Promise<Rental> {
-        return this.rentals.find(rental => rental.car_id === car_id)
+        return this.rentals.find(rental => {
+            if (rental.car_id == car_id && rental.end_date === null) {
+                return rental;
+            }
+        })
+    }
+    async findById(id: string): Promise<Rental> {
+        return this.rentals.find((rental) => rental.id === id)
     }
     async findOpenRentalByUser(user_id: string): Promise<Rental> {
-        return this.rentals.find(rental => rental.user_id === user_id)
+        return this.rentals.find(rental => {
+            if (rental.user_id == user_id && rental.end_date === null) {
+                return rental;
+            }
+        })
     }
     async findByUserId(user_id: string): Promise<Rental[]> {
-        throw new Error("Method not implemented.");
+        return this.rentals.filter(rental => rental.user_id === user_id)
     }
 
 
