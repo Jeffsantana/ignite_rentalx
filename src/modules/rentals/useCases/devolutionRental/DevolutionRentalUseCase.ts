@@ -32,6 +32,10 @@ class DevolutionRentalUseCase {
             throw new AppError("Rental does not exists")
         }
 
+        if (rental.end_date) {
+            throw new AppError("This rental was returned")
+        }
+
         const dateNow = this.dateProvider.dateNow();
 
         // Total daily rates used in rent
