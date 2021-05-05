@@ -26,6 +26,7 @@ describe("Create Category Controller", () => {
         await connection.close();
     })
     let token: string;
+    let refresh_token: string;
     it("Should be able to make login", async () => {
         const responseToken = await request(app)
             .post("/sessions")
@@ -35,6 +36,7 @@ describe("Create Category Controller", () => {
             })
             .expect(200)
         token = responseToken.body.token;
+        refresh_token = responseToken.body.refresh_token;
 
     })
     it("should be able to create a new common user", async () => {
@@ -60,11 +62,10 @@ describe("Create Category Controller", () => {
                 description: "Category description supertest"
             })
             .set({
-                Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${refresh_token}`
             })
 
         expect(result.status).toBe(201);
-        console.log("🚀 ~ result create new categories", result.status);
     })
     it("should be able not to create a new category with name already exists", async () => {
         const result = await request(app)
@@ -74,11 +75,10 @@ describe("Create Category Controller", () => {
                 description: "Category description supertest"
             })
             .set({
-                Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${refresh_token}`
             })
 
         expect(result.status).toBe(400);
-        console.log("🚀 ~ result categories not create", result.status);
     })
 
 })

@@ -9,6 +9,7 @@ let connection: Connection
 
 describe("Create Category Controller", () => {
     let token: string;
+    let refresh_token: string;
     beforeAll(async () => {
         connection = await createConnection();
         await connection.runMigrations();
@@ -29,6 +30,8 @@ describe("Create Category Controller", () => {
             })
             .expect(200)
         token = responseToken.body.token;
+        refresh_token = responseToken.body.refresh_token;
+
     })
     afterAll(async () => {
         await connection.dropDatabase();
@@ -43,7 +46,7 @@ describe("Create Category Controller", () => {
                 description: "Category description supertest"
             })
             .set({
-                Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${refresh_token}`
             })
 
         expect(result.status).toBe(201);
@@ -56,7 +59,7 @@ describe("Create Category Controller", () => {
                 description: "Category description supertest"
             })
             .set({
-                Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${refresh_token}`
             })
 
         expect(result.status).toBe(200);
