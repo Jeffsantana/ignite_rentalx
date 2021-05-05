@@ -26,7 +26,7 @@ describe("Create Car Specification", () => {
         const specifications_id = ["54321"]
         await expect(
             createCarSpecificationUseCase.execute({ car_id, specifications_id })
-        ).rejects.toEqual(new AppError("Car already Exists!"))
+        ).rejects.toEqual(new AppError("Car does not exists!"))
 
 
     })
