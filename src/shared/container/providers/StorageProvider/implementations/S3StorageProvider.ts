@@ -27,7 +27,6 @@ class S3StorageProvider implements IStorageProvider {
             Body: fileContent,
             ContentType
         }).promise();
-        console.log("🚀 ~ S3StorageProvider ~ result", result);
 
         await fs.promises.unlink(originalName);
 
