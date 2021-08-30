@@ -12,6 +12,7 @@ import createConnection from '@shared/infra/typeorm/index'
 import { AppError } from '@shared/errors/AppError';
 import { router } from './routes';
 import swaggerFile from '../../../swagger.json';
+import upload from "@config/upload";
 
 createConnection()
 
@@ -37,6 +38,8 @@ app.use((err: Error, request: Request, response: Response, next: NextFunction) =
 })
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile))
+
+app.use("/image", express.static(`${upload.tmpFolder}`))
 
 export { app }
 // app.listen(3333, () => {

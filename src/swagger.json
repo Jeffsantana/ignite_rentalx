@@ -16,12 +16,17 @@
                 ],
                 "summary": "Create a category",
                 "description": "Create a new category",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "requestBody": {
                     "content": {
                         "application/json": {
                             "schema": {
                                 "type": "object",
-                                "Properties": {
+                                "properties": {
                                     "name": {
                                         "type": "string"
                                     },
@@ -39,7 +44,7 @@
                 },
                 "responses": {
                     "201": {
-                        "description": "Created"
+                        "description": "Category created"
                     },
                     "500": {
                         "description": "Category already exists"
@@ -50,8 +55,8 @@
                 "tags": [
                     "Category"
                 ],
-                "summary": "List all categories",
-                "description": "List all categories",
+                "summary": "Listing all categories",
+                "description": "Listing all categories",
                 "responses": {
                     "200": {
                         "description": "Success",
@@ -82,8 +87,13 @@
                 "tags": [
                     "Category"
                 ],
-                "summary": "Upload a new category",
-                "description": "Upload a new category",
+                "summary": "Upload categories",
+                "description": "Upload new categories from a .csv document",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "requestBody": {
                     "content": {
                         "multipart/form-data": {
@@ -101,7 +111,7 @@
                 },
                 "responses": {
                     "201": {
-                        "description": "Created"
+                        "description": "Specifications created"
                     }
                 }
             }
@@ -113,6 +123,11 @@
                 ],
                 "summary": "Create a specification",
                 "description": "Create a new specification",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -124,10 +139,123 @@
                 },
                 "responses": {
                     "201": {
-                        "description": "Created"
+                        "description": "Specification created"
                     },
                     "500": {
-                        "description": "Specification already exists!"
+                        "description": "Specification already exists"
+                    }
+                }
+            }
+        },
+        "/sessions": {
+            "post": {
+                "tags": [
+                    "Session"
+                ],
+                "summary": "Authentication User",
+                "description": "Authenticate an user by its given email and password",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "E-mail or password incorrect!"
+                    }
+                }
+            }
+        },
+        "/cars": {
+            "post": {
+                "tags": [
+                    "Cars"
+                ],
+                "summary": "Create a new car",
+                "description": "Create a new car",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/Car"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    },
+                    "400": {
+                        "description": "This car already exists"
+                    }
+                }
+            }
+        },
+        "/cars/images/{id}": {
+            "post": {
+                "tags": [
+                    "Cars"
+                ],
+                "summary": "Upload images",
+                "description": "Upload images to a car",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Car id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "images": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "format": "binary"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created"
                     }
                 }
             }
@@ -143,6 +271,41 @@
                 "description": {
                     "type": "string"
                 }
+            }
+        },
+        "Car": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "daily_rate": {
+                    "type": "number"
+                },
+                "license_plate": {
+                    "type": "string"
+                },
+                "fine_amount": {
+                    "type": "number"
+                },
+                "brand": {
+                    "type": "string"
+                },
+                "category_id": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
             }
         }
     }
